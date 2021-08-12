@@ -16,9 +16,9 @@ ActiveRecord::Schema.define(version: 2021_08_12_090659) do
   enable_extension "plpgsql"
 
   create_table "scores", force: :cascade do |t|
-    t.string "player"
-    t.integer "score"
-    t.datetime "time"
+    t.string "player", null: false
+    t.integer "score", null: false
+    t.datetime "time", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["player"], name: "index_scores_on_player"
