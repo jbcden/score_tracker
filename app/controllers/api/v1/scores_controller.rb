@@ -23,6 +23,16 @@ module Api::V1
       end
     end
 
+    def destroy
+      score = Score.where(id: params[:id]).first
+
+      if score&.destroy
+        render json: {}, status: :ok
+      else
+        render json: {}, status: :not_found
+      end
+    end
+
     private
 
     def score_params

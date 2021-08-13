@@ -64,4 +64,24 @@ RSpec.describe Api::V1::ScoresController do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when the record does not exist' do
+      it 'returns a 404' do
+        delete :destroy, params: { id: 1 }
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the record exists' do
+      it 'returns a 200' do
+        score = create(:score)
+
+        delete :destroy, params: { id: score.id }
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
 end
