@@ -84,4 +84,30 @@ RSpec.describe Api::V1::ScoresController do
       end
     end
   end
+
+  describe 'GET #index' do
+    context 'when no matching data exists' do
+      it 'returns an empty array of scores' do
+        get :index, params: { player: 'doesNotExist' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores']).to be_empty
+      end
+    end
+
+    context 'when data exists' do
+      it 'returns all players when no additional filters are provided' do
+        create_list(:score, 10)
+
+        get :index
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(10)
+      end
+    end
+  end
 end

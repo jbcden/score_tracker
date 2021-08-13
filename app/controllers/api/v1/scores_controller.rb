@@ -33,6 +33,11 @@ module Api::V1
       end
     end
 
+    def index
+      scores = Score.all
+      render json: scores, status: :ok
+    end
+
     private
 
     def score_params
