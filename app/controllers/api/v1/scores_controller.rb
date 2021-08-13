@@ -12,6 +12,14 @@ module Api::V1
         render json: { errors: errors }, status: :unprocessable_entity
       end
     end
+
+    def show
+      score = Score.where(id: params[:id]).first
+
+      if score
+        render json: score, status: :ok
+      else
+        render json: {}, status: :not_found
       end
     end
 

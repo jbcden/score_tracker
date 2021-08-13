@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.4'
 
+gem 'active_model_serializers'
 gem 'rails', '~> 6.1.4'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
@@ -26,6 +27,7 @@ group :development do
 end
 
 group :test do
+  gem 'factory_bot_rails'
   gem 'rspec-rails'
 end
 
