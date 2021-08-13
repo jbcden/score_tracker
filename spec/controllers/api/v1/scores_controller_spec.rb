@@ -11,7 +11,7 @@ RSpec.describe Api::V1::ScoresController do
         post :create, params: { player: 'test', score: 1 }
         parsed_response = JSON.parse(response.body)
 
-        expect(response).to have_http_status(:bad_request)
+        expect(response).to have_http_status(:unprocessable_entity)
         # NOTE: this could be handled differently if using translations
         # maybe improve format -- currently doesn't handle multiple errors well
         expect(parsed_response['errors']).to include("can't be blank")
@@ -24,7 +24,7 @@ RSpec.describe Api::V1::ScoresController do
         post :create, params: { player: 'test', score: 0, time: '2021-08-12T09:46:00Z' }
         parsed_response = JSON.parse(response.body)
 
-        expect(response).to have_http_status(:bad_request)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(parsed_response['errors']).to include('must be greater than 0')
         expect(Score.count).to eq(before_count)
       end

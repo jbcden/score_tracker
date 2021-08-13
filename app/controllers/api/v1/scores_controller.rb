@@ -6,10 +6,12 @@ module Api::V1
       score = Score.new(score_params)
 
       if score.save
-        render json: score, status: :ok
+        render json: score, status: :created
       else
         errors = score.errors.full_messages.join(', ')
-        render json: { errors: errors }, status: :bad_request
+        render json: { errors: errors }, status: :unprocessable_entity
+      end
+    end
       end
     end
 
