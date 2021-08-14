@@ -1,5 +1,5 @@
 class ScoreSerializer < ActiveModel::Serializer
-  attributes :player, :score, :time
+  attributes :id, :player, :score, :time
 
   def time
     object.time.iso8601
