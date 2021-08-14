@@ -40,6 +40,9 @@ module Api::V1
       scores = scores.players(params[:players]) if params[:players]
 
       render json: scores, status: :ok
+
+    rescue ArgumentError
+      render json: {}, status: :unprocessable_entity
     end
 
     private

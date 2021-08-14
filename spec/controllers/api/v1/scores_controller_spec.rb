@@ -86,6 +86,14 @@ RSpec.describe Api::V1::ScoresController do
   end
 
   describe 'GET #index' do
+    context 'when incorrect time formats are specified' do
+      it 'returns a 422' do
+        get :index, params: { before: Time.current.to_i }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     context 'when no matching data exists' do
       it 'returns an empty array of scores' do
         get :index, params: { player: 'doesNotExist' }
