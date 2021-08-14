@@ -56,7 +56,5 @@ curl -X GET "http://localhost:3000/api/v1/player_histories/jacob"
 
 #### Errors
 
-#### Errors
-
 When the record associated with the `name` does not exist, an empty body JSON body
 will be returned with a 404 status code.
