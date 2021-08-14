@@ -108,6 +108,20 @@ RSpec.describe Api::V1::ScoresController do
         expect(response).to have_http_status(:ok)
         expect(parsed_response['scores'].size).to eq(10)
       end
+
+      it 'can be filtered by time' do
+        january_2020 = create(:score, player: '2020', time: '2020-01-01')
+        january_2021 = create(:score, player: '2021', time: '2021-01-01')
+
+        get :index, params: { after: '2020-01-01' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(1)
+        players = parsed_response['scores'].map { |score| score['player'] }
+        expect(players).to include(january_2021.player)
+      end
     end
   end
 end

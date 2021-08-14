@@ -35,6 +35,8 @@ module Api::V1
 
     def index
       scores = Score.all
+      scores = scores.after(DateTime.iso8601(params[:after])) if params[:after]
+
       render json: scores, status: :ok
     end
 
