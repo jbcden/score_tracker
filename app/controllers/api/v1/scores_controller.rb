@@ -52,14 +52,17 @@ module Api::V1
     end
 
     def validate_datetime_params
+      current_param = nil
+
       [:after, :before, :time].each do |param|
+        current_param = param
         if params[param]
           DateTime.iso8601(params[param])
         end
       end
 
     rescue ArgumentError
-      render json: { errors: 'time must be iso8601 compliant' }, status: :unprocessable_entity
+      render json: { errors: "`#{current_param}` must be iso8601 compliant" }, status: :unprocessable_entity
     end
   end
 end
