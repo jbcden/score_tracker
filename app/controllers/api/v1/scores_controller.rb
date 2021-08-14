@@ -2,6 +2,8 @@
 
 module Api::V1
   class ScoresController < ApplicationController
+    before_action :validate_datetime_params, only: [:create, :index]
+
     def create
       score = Score.new(score_params)
 
@@ -41,15 +43,23 @@ module Api::V1
       scores = scores.page(params.fetch(:page, 0)).per(params.fetch(:per, 20))
 
       render json: scores, status: :ok
-
-    rescue ArgumentError
-      render json: {}, status: :unprocessable_entity
     end
 
     private
 
     def score_params
       params.permit(:player, :score, :time)
+    end
+
+    def validate_datetime_params
+      [:after, :before, :time].each do |param|
+        if params[param]
+          DateTime.iso8601(params[param])
+        end
+      end
+
+    rescue ArgumentError
+      render json: { errors: 'time must be iso8601 compliant' }, status: :unprocessable_entity
     end
   end
 end

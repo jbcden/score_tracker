@@ -28,6 +28,17 @@ RSpec.describe Api::V1::ScoresController do
         expect(parsed_response['errors']).to include('must be greater than 0')
         expect(Score.count).to eq(before_count)
       end
+
+      it 'fails to create the score if the time is not iso8601 compliant' do
+        before_count = Score.count
+
+        post :create, params: { player: 'test', score: 1, time: Time.current.to_i }
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(parsed_response['errors']).to include('must be iso8601 compliant')
+        expect(Score.count).to eq(before_count)
+      end
     end
 
     it 'creates a score' do
