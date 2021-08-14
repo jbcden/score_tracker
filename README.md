@@ -1,24 +1,39 @@
-# README
+# Score Tracker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+- [Local development](#local-development)
 
-Things you may want to cover:
+## Local development
 
-* Ruby version
+### Required software
 
-* System dependencies
+* Ruby 2.7
+* Ruby on Rails 6.1
+* Postgresql 13 or later
 
-* Configuration
+### Basic setup
 
-* Database creation
+Ensure that you have Postgresql setup. The current default assumes that there is
+a postgres user with the same name as the current user on your machine, if this
+is not the case, please update the `config/database.yml` with the correct
+`username` value.
 
-* Database initialization
+Once that is set up, run:
 
-* How to run the test suite
+```bash
+bundle install
+bundle exec rails db:create db:migrate db:test:prepare
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+You can verify that everything was set up correctly by running the tests with:
 
-* Deployment instructions
+```bash
+bundle exec rspec
+```
 
-* ...
+Assuming the tests all pass, you should be able to run:
+
+```bash
+bundle exec rails s
+```
+
+and begin making requests against the API!
