@@ -38,6 +38,13 @@ RSpec.describe Api::V1::ScoresController do
       expect(response).to have_http_status(:success)
       expect(Score.count).to eq(before_count + 1)
     end
+
+    it 'persists the player name as a lower case version' do
+      post :create, params: { player: 'TeST', score: 1, time: '2021-08-12T09:46:00Z' }
+
+      expect(response).to have_http_status(:success)
+      expect(Score.last.player).to eq('test')
+    end
   end
 
   describe 'GET #show' do
@@ -174,6 +181,17 @@ RSpec.describe Api::V1::ScoresController do
         expect(players.size).to eq(2)
         expect(players).to include('tester')
         expect(players).to include('ignored')
+      end
+
+      it 'can be filtered by player even when the casing of the name does not match' do
+        create(:score, player: 'tester')
+
+        get :index, params: { players: 'TESTER' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(1)
       end
 
       it 'will return 20 records at most by default' do

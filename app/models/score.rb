@@ -4,6 +4,8 @@ class Score < ApplicationRecord
   validates_presence_of :player, :score, :time
   validates :score, numericality: { greater_than: 0 }
 
+  attribute :player, DowncasedString.new
+
   scope :after, ->(after_date) do
     where('time > ?', after_date.end_of_day)
   end
