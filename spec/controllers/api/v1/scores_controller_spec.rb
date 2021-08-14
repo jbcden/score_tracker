@@ -143,6 +143,29 @@ RSpec.describe Api::V1::ScoresController do
         expect(players).to include(january_2020.player)
         expect(players).to include(january_2021.player)
       end
+
+      it 'can be filtered by player' do
+        create_list(:score, 10, player: 'tester')
+        create_list(:score, 10, player: 'ignored')
+
+        get :index, params: { players: 'tester' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        players = parsed_response['scores'].map { |score| score['player'] }.uniq
+        expect(players.size).to eq(1)
+        expect(players.first).to eq('tester')
+
+        get :index, params: { players: ['tester', 'ignored'] }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        players = parsed_response['scores'].map { |score| score['player'] }.uniq
+        expect(players.size).to eq(2)
+        expect(players).to include('tester')
+        expect(players).to include('ignored')
       end
     end
   end

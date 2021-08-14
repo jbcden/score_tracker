@@ -11,4 +11,8 @@ class Score < ApplicationRecord
   scope :before, ->(before_date) do
     where('time < ?', before_date.beginning_of_day)
   end
+
+  scope :players, ->(players) do
+    where(player: players)
+  end
 end
