@@ -175,6 +175,39 @@ RSpec.describe Api::V1::ScoresController do
         expect(players).to include('tester')
         expect(players).to include('ignored')
       end
+
+      it 'will return 20 records at most by default' do
+        create_list(:score, 40, player: 'tester')
+
+        get :index
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(20)
+      end
+
+      it 'can have the page size customized' do
+        create_list(:score, 40, player: 'tester')
+
+        get :index, params: { per: 30 }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(30)
+      end
+
+      it 'can specify a page other than the first one' do
+        create_list(:score, 40, player: 'tester')
+
+        get :index, params: { page: 2, per: 30 }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(10)
+      end
     end
   end
 end

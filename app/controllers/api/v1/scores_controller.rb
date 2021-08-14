@@ -38,6 +38,7 @@ module Api::V1
       scores = scores.after(DateTime.iso8601(params[:after])) if params[:after]
       scores = scores.before(DateTime.iso8601(params[:before])) if params[:before]
       scores = scores.players(params[:players]) if params[:players]
+      scores = scores.page(params.fetch(:page, 0)).per(params.fetch(:per, 20))
 
       render json: scores, status: :ok
 
