@@ -7,4 +7,8 @@ class Score < ApplicationRecord
   scope :after, ->(after_date) do
     where('time > ?', after_date.end_of_day)
   end
+
+  scope :before, ->(before_date) do
+    where('time < ?', before_date.beginning_of_day)
+  end
 end

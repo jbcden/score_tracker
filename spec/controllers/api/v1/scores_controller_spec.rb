@@ -121,6 +121,28 @@ RSpec.describe Api::V1::ScoresController do
         expect(parsed_response['scores'].size).to eq(1)
         players = parsed_response['scores'].map { |score| score['player'] }
         expect(players).to include(january_2021.player)
+
+        get :index, params: { before: '2021-01-01' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(1)
+        players = parsed_response['scores'].map { |score| score['player'] }
+        expect(players).to include(january_2020.player)
+
+        create(:score, player: '2019', time: '2019-01-01')
+
+        get :index, params: { after: '2019-12-31', before: '2021-01-02' }
+
+        parsed_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(parsed_response['scores'].size).to eq(2)
+        players = parsed_response['scores'].map { |score| score['player'] }
+        expect(players).to include(january_2020.player)
+        expect(players).to include(january_2021.player)
+      end
       end
     end
   end
